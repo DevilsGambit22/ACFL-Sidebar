@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ACFA League</title>
+
+<style>
+:root{
+  --red:#ff1a1a;
+  --red2:#9b0000;
+  --dark:#050505;
+  --card:#111;
+  --text:#f5f5f5;
+  --muted:#bbbbbb;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#3b0000 0%,#080000 55%,#000 100%);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+.wrap{
+  position:relative;
+  max-width:420px;
+  margin:auto;
+  padding:12px;
+  border:2px solid var(--red);
+  border-radius:16px;
+  background:rgba(8,0,0,.96);
+  box-shadow:0 0 18px var(--red);
+  overflow:hidden;
+  animation:pulseBorder 1.8s infinite alternate;
+}
+
+@keyframes pulseBorder{
+  from{box-shadow:0 0 10px var(--red2),0 0 18px var(--red)}
+  to{box-shadow:0 0 22px var(--red),0 0 38px var(--red)}
+}
+
+.swordRain{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+
+.sword{
+  position:absolute;
+  top:-50px;
+  color:var(--red);
+  text-shadow:0 0 10px var(--red);
+  animation:fallSword linear infinite;
+  opacity:.7;
+}
+
+@keyframes fallSword{
+  from{transform:translateY(-60px) rotate(0deg)}
+  to{transform:translateY(1200px) rotate(360deg)}
+}
+
+.wrap > *:not(.swordRain){
+  position:relative;
+  z-index:1;
+}
+
+h1,h2,h3{
+  color:var(--red);
+  text-align:center;
+  text-shadow:0 0 8px var(--red);
+}
+
+h1{font-size:26px;margin:10px 0 8px}
+h2{font-size:20px;margin:0 0 10px}
+h3{font-size:16px;margin:8px 0}
+
+.card{
+  background:rgba(17,0,0,.95);
+  border:1px solid var(--red);
+  border-radius:12px;
+  padding:12px;
+  margin:12px 0;
+  box-shadow:0 0 10px rgba(255,0,0,.3);
+}
+
+.marquee{
+  overflow:hidden;
+  white-space:nowrap;
+  background:#000;
+  border:1px solid var(--red);
+  border-radius:10px;
+}
+
+.marquee span{
+  display:inline-block;
+  padding:8px;
+  color:#ff4a4a;
+  font-weight:bold;
+  animation:scroll 15s linear infinite;
+}
+
+@keyframes scroll{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+.banner{
+  text-align:center;
+  padding:12px;
+  border:1px solid var(--red);
+  border-radius:12px;
+  margin:12px 0;
+  background:linear-gradient(135deg,#4a0000,#050505);
+  box-shadow:0 0 12px var(--red);
+}
+
+.banner p{
+  margin:6px 0 0;
+  line-height:1.5;
+  font-size:13px;
+}
+
+.btn{
+  display:block;
+  text-align:center;
+  background:var(--red);
+  color:#050505;
+  text-decoration:none;
+  font-weight:bold;
+  padding:10px;
+  border-radius:10px;
+  margin:8px 0;
+  box-shadow:0 0 10px rgba(255,0,0,.65);
+}
+
+.btn.dark{
+  background:#050505;
+  color:#ff4a4a;
+  border:1px solid var(--red);
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #330000;
+  padding:6px 0;
+  gap:8px;
+}
+
+.member{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:#050505;
+  border:1px solid #500;
+  border-radius:10px;
+  padding:8px;
+  margin:8px 0;
+}
+
+.member img{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid var(--red);
+  object-fit:cover;
+}
+
+.member a{
+  color:#ff4a4a;
+  text-decoration:none;
+}
+
+.badge{
+  margin-left:auto;
+  background:var(--red);
+  color:#050505;
+  font-size:11px;
+  padding:4px 7px;
+  border-radius:8px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+small{color:var(--muted)}
+
+button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  background:var(--red);
+  color:#050505;
+  font-weight:bold;
+  margin:5px 0;
+  cursor:pointer;
+  box-shadow:0 0 8px rgba(255,0,0,.45);
+}
+
+button.secondary{
+  background:#050505;
+  color:#ff4a4a;
+  border:1px solid var(--red);
+}
+
+.now-playing{
+  text-align:center;
+  background:#050505;
+  border:1px solid var(--red);
+  border-radius:10px;
+  padding:10px;
+  margin:10px 0;
+}
+
+.now-playing h3{
+  margin:4px 0 0;
+}
+
+.music-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+  margin:8px 0;
+}
+
+.music-controls button{
+  font-size:13px;
+  padding:9px 4px;
+}
+
+.music-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.music-row input{
+  flex:1;
+  accent-color:var(--red);
+}
+
+#progressBar{
+  width:100%;
+  accent-color:var(--red);
+}
+
+.time-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:4px;
+}
+
+.activeMusicMode{
+  outline:2px solid #ffb3b3;
+  box-shadow:0 0 12px var(--red);
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:999;
+}
+
+.footer{
+  text-align:center;
+  color:#999;
+  font-size:11px;
+  margin-top:12px;
+  line-height:1.5;
+}
+
+p,li{
+  font-size:14px;
+  line-height:1.6;
+}
+
+ul{
+  margin:6px 0;
+  padding-left:22px;
+}
+
+@media(max-width:480px){
+  .wrap{
+    max-width:100%;
+    border-radius:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="swordRain" id="swordRain"></div>
+
+<h1>⚔️ ACFA League</h1>
+
+<div class="marquee">
+<span>Fight For Your Club • Earn Your Legacy • Club vs Club • Daily Matches • Season Battles • ACFA League</span>
+</div>
+
+<div class="banner">
+  <h2 id="timeGreeting">Loading greeting...</h2>
+  <p id="themeMessage">Preparing the battlefield...</p>
+</div>
+
+<div class="card">
+<h2>🔥 League Mission</h2>
+<p><b>ACFA League</b> is the competitive branch of the ACFA community, built for organized club-vs-club battles, daily matches, seasonal competition, and championship glory.</p>
+<p>This is where clubs bring their strongest players, settle scores on the board, and pretend blundering a rook was “part of the plan.” Sure.</p>
+</div>
+
+<div class="card">
+<h2>⚔️ Season Format</h2>
+<ul>
+  <li>Club vs club competition</li>
+  <li>Daily team matches</li>
+  <li>Season standings and results</li>
+  <li>Bracket progression</li>
+  <li>Championship recognition</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>📊 Live League Stats</h2>
+<div class="stat"><b>Total Members</b><span id="totalMembers">Loading...</span></div>
+<div class="stat"><b>Recently Active</b><span id="activeMembers">Loading...</span></div>
+</div>
+
+<div class="card">
+<h2>🆕 Newest Legionaries</h2>
+<div id="memberBoard">Loading newest members...</div>
+</div>
+
+<div class="card">
+<h2>🎵 ACFA League Theme Music</h2>
+<p style="text-align:center;margin-top:0;">War drums, frozen oars, and epic battle music. Subtle? No. Effective? Absolutely.</p>
+
+<audio id="clubMusic" preload="none"></audio>
+
+<div class="now-playing">
+  <small>Now Playing</small>
+  <h3 id="trackTitle">Loading track...</h3>
+</div>
+
+<div class="music-controls">
+  <button onclick="prevTrack()">⏮</button>
+  <button id="musicBtn" onclick="toggleMusic()">▶</button>
+  <button onclick="nextTrack()">⏭</button>
+</div>
+
+<input id="progressBar" type="range" min="0" max="100" value="0" step="1" oninput="seekMusic(this.value)">
+
+<div class="time-row">
+  <small id="currentTime">0:00</small>
+  <small id="durationTime">0:00</small>
+</div>
+
+<div class="music-controls">
+  <button id="shuffleBtn" onclick="toggleShuffle()">🔀 Shuffle</button>
+  <button id="repeatBtn" onclick="toggleRepeat()">🔁 Repeat</button>
+  <button onclick="stopMusic()">⏹ Stop</button>
+</div>
+
+<div class="music-row">
+  <span>🔈</span>
+  <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.45" oninput="setVolume(this.value)">
+  <span>🔊</span>
+</div>
+
+<small id="musicStatus">Music ready</small>
+</div>
+
+<div class="card">
+<h2>🎉 Victory Effects</h2>
+<button onclick="confetti()">Red Confetti</button>
+<button onclick="swordBurst()">Sword Burst</button>
+<button class="secondary" onclick="fireworks()">League Fireworks</button>
+</div>
+
+<div class="footer">
+Created by @DevilsGambit22<br>
+© 2026 ACFA League
+</div>
+
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const CLUB_SLUG = "acfa-league";
+
+const API = "https://api.chess.com/pub";
+const MEMBER_LIMIT = 3;
+const DEFAULT_AVATAR = "https://www.chess.com/bundles/web/images/noavatar_l.84a92436.gif";
+
+/* Greeting system */
+const greeting = document.getElementById("timeGreeting");
+const message = document.getElementById("themeMessage");
+
+function updateGreeting(){
+  const hour = new Date().getHours();
+
+  if(hour >= 7 && hour < 12){
+    greeting.textContent = "🔥 Good Morning, Legionaries";
+    message.textContent = "The battlefield is open. Prepare your first move.";
+  }else if(hour >= 12 && hour < 19){
+    greeting.textContent = "⚔️ Good Afternoon, ACFA League";
+    message.textContent = "Perfect time to fight for your club, preferably without hanging a queen.";
+  }else if(hour >= 19 && hour <= 23){
+    greeting.textContent = "🌑 Good Evening, Warriors";
+    message.textContent = "The clocks are ticking and the league waits for no one.";
+  }else{
+    greeting.textContent = "🩸 Late Night League Mode";
+    message.textContent = "Quiet hours, sharp tactics, questionable sleep schedules.";
+  }
+}
+
+updateGreeting();
+setInterval(updateGreeting,60000);
+
+/* Falling swords inside sidebar */
+function createSwords(){
+  const swordRain = document.getElementById("swordRain");
+  const swordCount = 24;
+
+  for(let i = 0; i < swordCount; i++){
+    const sword = document.createElement("div");
+    sword.className = "sword";
+    sword.textContent = "⚔️";
+
+    sword.style.left = Math.random() * 100 + "%";
+    sword.style.fontSize = (Math.random() * 12 + 13) + "px";
+    sword.style.animationDuration = (Math.random() * 12 + 14) + "s";
+    sword.style.animationDelay = (Math.random() * 14) + "s";
+
+    swordRain.appendChild(sword);
+  }
+}
+
+createSwords();
+
+/* Chess.com API */
+async function getJSON(url){
+  const res = await fetch(url, {cache:"no-store"});
+  if(!res.ok) throw new Error("API failed: " + res.status);
+  return await res.json();
+}
+
+async function loadClubMembers(){
+  const data = await getJSON(`${API}/club/${CLUB_SLUG}/members`);
+
+  const weekly = data.weekly || [];
+  const monthly = data.monthly || [];
+  const allTime = data.all_time || [];
+
+  const map = new Map();
+
+  [...weekly, ...monthly, ...allTime].forEach(member=>{
+    if(member.username){
+      map.set(member.username.toLowerCase(), member);
+    }
+  });
+
+  const members = Array.from(map.values());
+
+  const newestMembers = [...members]
+    .filter(member=>member.joined)
+    .sort((a,b)=>(b.joined || 0) - (a.joined || 0))
+    .slice(0, MEMBER_LIMIT);
+
+  document.getElementById("totalMembers").textContent = members.length;
+  document.getElementById("activeMembers").textContent = weekly.length;
+
+  renderMembers(newestMembers);
+  loadAvatars(newestMembers);
+}
+
+function renderMembers(members){
+  const board = document.getElementById("memberBoard");
+  board.innerHTML = "";
+
+  if(!members.length){
+    board.innerHTML = "<p>No newest members found yet.</p>";
+    return;
+  }
+
+  members.forEach((m,index)=>{
+    const username = m.username || "Unknown";
+    const joined = m.joined ? new Date(m.joined * 1000).toLocaleDateString() : "Unknown";
+
+    let badgeText = "Newest";
+    if(index === 0) badgeText = "Latest";
+    if(index === 1) badgeText = "New";
+    if(index === 2) badgeText = "Recent";
+
+    const item = document.createElement("div");
+    item.className = "member";
+    item.setAttribute("data-user", username.toLowerCase());
+    item.innerHTML = `
+      <img src="${DEFAULT_AVATAR}" alt="${username}">
+      <div>
+        <b><a href="https://www.chess.com/member/${username}" target="_blank">${username}</a></b><br>
+        <small>Joined: ${joined}</small>
+      </div>
+      <span class="badge">${badgeText}</span>
+    `;
+    board.appendChild(item);
+  });
+}
+
+async function loadAvatars(members){
+  for(const m of members){
+    const username = m.username;
+    if(!username) continue;
+
+    try{
+      const profile = await getJSON(`${API}/player/${username}`);
+      const avatar = profile.avatar || DEFAULT_AVATAR;
+
+      const memberCard = document.querySelector(`.member[data-user="${username.toLowerCase()}"]`);
+      if(memberCard){
+        const img = memberCard.querySelector("img");
+        img.src = avatar;
+      }
+    }catch(e){}
+  }
+}
+
+loadClubMembers().catch(err=>{
+  document.getElementById("memberBoard").innerHTML =
+  "<p>Could not load newest members. Check the club slug or Chess.com API availability.</p>";
+  document.getElementById("totalMembers").textContent = "Error";
+  document.getElementById("activeMembers").textContent = "Error";
+});
+
+/* ACFA League Theme Music */
+const tracks = [
+  {
+    title: "Epic War",
+    src: "nastelborn-epic-war-383905.mp3"
+  },
+  {
+    title: "Happy War Drums",
+    src: "india_happy-war-drums-494866.mp3"
+  },
+  {
+    title: "Frozen Oars of War",
+    src: "rubyzephyyr-frozen-oars-of-war-446041.mp3"
+  }
+];
+
+const music = document.getElementById("clubMusic");
+const musicBtn = document.getElementById("musicBtn");
+const musicStatus = document.getElementById("musicStatus");
+const volumeSlider = document.getElementById("volumeSlider");
+const trackTitle = document.getElementById("trackTitle");
+const progressBar = document.getElementById("progressBar");
+const currentTimeEl = document.getElementById("currentTime");
+const durationTimeEl = document.getElementById("durationTime");
+const shuffleBtn = document.getElementById("shuffleBtn");
+const repeatBtn = document.getElementById("repeatBtn");
+
+let currentTrack = Number(localStorage.getItem("acfaLeagueCurrentTrack")) || 0;
+let shuffleMode = localStorage.getItem("acfaLeagueShuffle") === "true";
+let repeatMode = localStorage.getItem("acfaLeagueRepeat") === "true";
+
+if(currentTrack < 0 || currentTrack >= tracks.length){
+  currentTrack = 0;
+}
+
+function loadTrack(index){
+  currentTrack = index;
+  music.src = tracks[currentTrack].src;
+  trackTitle.textContent = tracks[currentTrack].title;
+  musicStatus.textContent = "Selected: " + tracks[currentTrack].title;
+  localStorage.setItem("acfaLeagueCurrentTrack", currentTrack);
+}
+
+function toggleMusic(){
+  if(music.paused){
+    music.play().then(()=>{
+      musicBtn.textContent = "⏸";
+      musicStatus.textContent = "Playing: " + tracks[currentTrack].title;
+    }).catch(()=>{
+      musicStatus.textContent = "Track not found. Check your repository filenames.";
+    });
+  }else{
+    music.pause();
+    musicBtn.textContent = "▶";
+    musicStatus.textContent = "Paused";
+  }
+}
+
+function nextTrack(){
+  if(shuffleMode){
+    let next = currentTrack;
+    while(next === currentTrack && tracks.length > 1){
+      next = Math.floor(Math.random() * tracks.length);
+    }
+    currentTrack = next;
+  }else{
+    currentTrack = (currentTrack + 1) % tracks.length;
+  }
+
+  const wasPlaying = !music.paused;
+  loadTrack(currentTrack);
+
+  if(wasPlaying){
+    music.play();
+    musicBtn.textContent = "⏸";
+  }
+}
+
+function prevTrack(){
+  currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+
+  const wasPlaying = !music.paused;
+  loadTrack(currentTrack);
+
+  if(wasPlaying){
+    music.play();
+    musicBtn.textContent = "⏸";
+  }
+}
+
+function toggleShuffle(){
+  shuffleMode = !shuffleMode;
+  localStorage.setItem("acfaLeagueShuffle", shuffleMode);
+  shuffleBtn.classList.toggle("activeMusicMode", shuffleMode);
+}
+
+function toggleRepeat(){
+  repeatMode = !repeatMode;
+  localStorage.setItem("acfaLeagueRepeat", repeatMode);
+  repeatBtn.classList.toggle("activeMusicMode", repeatMode);
+}
+
+function stopMusic(){
+  music.pause();
+  music.currentTime = 0;
+  musicBtn.textContent = "▶";
+  musicStatus.textContent = "Stopped";
+  progressBar.value = 0;
+  currentTimeEl.textContent = "0:00";
+}
+
+function setVolume(value){
+  music.volume = Number(value);
+  localStorage.setItem("acfaLeagueMusicVolume", value);
+}
+
+function formatTime(seconds){
+  if(isNaN(seconds)) return "0:00";
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60).toString().padStart(2,"0");
+  return min + ":" + sec;
+}
+
+function seekMusic(value){
+  if(music.duration){
+    music.currentTime = (value / 100) * music.duration;
+  }
+}
+
+music.addEventListener("timeupdate",()=>{
+  if(music.duration){
+    progressBar.value = (music.currentTime / music.duration) * 100;
+    currentTimeEl.textContent = formatTime(music.currentTime);
+    durationTimeEl.textContent = formatTime(music.duration);
+  }
+});
+
+music.addEventListener("loadedmetadata",()=>{
+  durationTimeEl.textContent = formatTime(music.duration);
+});
+
+music.addEventListener("ended",()=>{
+  if(repeatMode){
+    music.currentTime = 0;
+    music.play();
+  }else{
+    nextTrack();
+    music.play();
+  }
+});
+
+const savedVolume = localStorage.getItem("acfaLeagueMusicVolume");
+if(savedVolume !== null){
+  music.volume = Number(savedVolume);
+  volumeSlider.value = savedVolume;
+}else{
+  music.volume = 0.45;
+}
+
+shuffleBtn.classList.toggle("activeMusicMode", shuffleMode);
+repeatBtn.classList.toggle("activeMusicMode", repeatMode);
+
+loadTrack(currentTrack);
+
+/* Celebration effects */
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+function confetti(){
+  let pieces=[];
+  for(let i=0;i<180;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,
+      y:-20,
+      vx:(Math.random()-.5)*7,
+      vy:Math.random()*5+3,
+      r:Math.random()*5+2,
+      life:160
+    });
+  }
+  animate(pieces,"dot");
+}
+
+function fireworks(){
+  let pieces=[];
+  for(let i=0;i<240;i++){
+    let a=Math.random()*Math.PI*2;
+    let s=Math.random()*7+2;
+    pieces.push({
+      x:canvas.width/2,
+      y:canvas.height/2,
+      vx:Math.cos(a)*s,
+      vy:Math.sin(a)*s,
+      r:Math.random()*4+2,
+      life:130
+    });
+  }
+  animate(pieces,"dot");
+}
+
+function swordBurst(){
+  let icons=["⚔️","🛡️","♜","♞","♛"];
+  let pieces=[];
+  for(let i=0;i<90;i++){
+    let a=Math.random()*Math.PI*2;
+    let s=Math.random()*6+2;
+    pieces.push({
+      x:canvas.width/2,
+      y:canvas.height/2,
+      vx:Math.cos(a)*s,
+      vy:Math.sin(a)*s,
+      icon:icons[Math.floor(Math.random()*icons.length)],
+      life:130
+    });
+  }
+  animate(pieces,"icon");
+}
+
+function animate(pieces,type){
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      p.x+=p.vx;
+      p.y+=p.vy;
+      p.vy+=.05;
+      p.life--;
+      ctx.globalAlpha=Math.max(p.life/130,0);
+
+      if(type==="icon"){
+        ctx.font="26px Arial";
+        ctx.fillStyle="#ff1a1a";
+        ctx.fillText(p.icon,p.x,p.y);
+      }else{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=["#ff1a1a","#9b0000","#ffffff","#ff4a4a"][Math.floor(Math.random()*4)];
+        ctx.fill();
+      }
+    });
+
+    ctx.globalAlpha=1;
+    frame++;
+    if(frame<180) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+</script>
+
+</body>
+</html>
